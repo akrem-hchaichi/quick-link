@@ -22,6 +22,6 @@ process.on('unhandledRejection', (error) => {
 // Start server
 connectDB().then(() => {
     app.listen(PORT, () => {
-        logger.info(`Server running on http://localhost:${PORT}`);
+        logger.info(`Server running on ${PORT}`);
     });
 });
