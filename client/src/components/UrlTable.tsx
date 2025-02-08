@@ -55,12 +55,13 @@ const UrlTable: React.FC<UrlTableProps> = ({ urls }) => {
             ).unwrap();
             toast.success('URL updated successfully!');
             setEditUrl(null);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             toast.error('Failed to update URL. Please try again.');
         }
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
+    const handleChangePage = (_event: unknown, newPage: number) => {
         setPage(newPage);
     };
 
@@ -76,12 +77,15 @@ const UrlTable: React.FC<UrlTableProps> = ({ urls }) => {
     };
 
     const sortedUrls = urls.slice().sort((a, b) => {
-        if (a[orderBy] < b[orderBy]) {
-            return order === 'asc' ? -1 : 1;
+        if (orderBy !== "customShortId") {
+            if (a[orderBy] < b[orderBy]) {
+                return order === 'asc' ? -1 : 1;
+            }
+            if (a[orderBy] > b[orderBy]) {
+                return order === 'asc' ? 1 : -1;
+            }
         }
-        if (a[orderBy] > b[orderBy]) {
-            return order === 'asc' ? 1 : -1;
-        }
+
         return 0;
     });
 

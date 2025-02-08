@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Url } from '../../types/url';
+import { fetchUrlsApiResponse, Url } from '../../types/url';
 import { setLoading, setError, setUrls, setCurrentUrl, addUrl, updateUrl, deleteUrl } from './urlSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -46,7 +47,7 @@ export const fetchUrls = createAsyncThunk(
   ) => {
     dispatch(setLoading(true));
     try {
-      const response = await axios.get<Url[]>(`${API_BASE_URL}/urls`, {
+      const response = await axios.get<fetchUrlsApiResponse>(`${API_BASE_URL}/urls`, {
         params: queryParams,
       });
       dispatch(setUrls(response.data.data));
