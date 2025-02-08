@@ -1,0 +1,349 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "URL Shortener API",
+    "version": "1.0.0",
+    "description": "A simple URL shortening service"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/urls": {
+      "post": {
+        "tags": [
+          "Url-Resource"
+        ],
+        "summary": "Create a new URL",
+        "description": "Shorten a long URL and optionally provide a custom short ID.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "longUrl": {
+                    "type": "string",
+                    "format": "url",
+                    "example": "https://www.example.com"
+                  },
+                  "customShortId": {
+                    "type": "string",
+                    "example": "example123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "URL created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Url"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "get": {
+         "tags": [
+          "Url-Resource"
+        ],
+        "summary": "Get all URLs (paginated and filtered)",
+        "description": "Retrieve a paginated and filtered list of URLs.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "shortId",
+                "longUrl",
+                "clicks",
+                "createdAt"
+              ],
+              "default": "createdAt"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
+          },
+          {
+            "name": "shortId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "longUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customShortId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "clicks",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "createdAt",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of URLs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Url"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/urls/{shortId}": {
+      "get": {
+         "tags": [
+          "Url-Resource"
+        ],
+        "summary": "Get a URL by shortId",
+        "description": "Retrieve a specific URL by its shortId or customShortId.",
+        "parameters": [
+          {
+            "name": "shortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "URL found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Url"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      },
+      "put": {
+         "tags": [
+          "Url-Resource"
+        ],
+        "summary": "Update a URL",
+        "description": "Update the longUrl or customShortId of a specific URL.",
+        "parameters": [
+          {
+            "name": "shortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "longUrl": {
+                    "type": "string",
+                    "format": "url",
+                    "example": "https://www.updated-example.com"
+                  },
+                  "customShortId": {
+                    "type": "string",
+                    "example": "updated123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "URL updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Url"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Url-Resource"
+        ],
+        "summary": "Delete a URL",
+        "description": "Delete a specific URL by its shortId or customShortId.",
+        "parameters": [
+          {
+            "name": "shortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "URL deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "URL deleted successfully"
+                    },
+                    "url": {
+                      "$ref": "#/components/schemas/Url"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Url": {
+        "type": "object",
+        "properties": {
+          "shortId": {
+            "type": "string",
+            "description": "The auto-generated short ID for the URL"
+          },
+          "longUrl": {
+            "type": "string",
+            "description": "The original long URL"
+          },
+          "customShortId": {
+            "type": "string",
+            "description": "Optional custom short ID provided by the user"
+          },
+          "clicks": {
+            "type": "number",
+            "description": "Number of times the short URL has been accessed"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the URL was created"
+          }
+        }
+      }
+    }
+  }
+}
