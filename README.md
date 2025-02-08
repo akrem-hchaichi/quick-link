@@ -73,6 +73,7 @@ This repository contains a full-stack web application with an **Express.js backe
 1. Start the backend and frontend as mentioned above.
 2. Access the frontend at `http://localhost:5173`
 3. The backend runs on `http://localhost:5000`
+4. The backend docs runs on `http://localhost:5000/api-docs/`
 
 ## **License**
 

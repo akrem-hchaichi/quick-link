@@ -7,25 +7,22 @@ import cors from 'cors';
 
 const app = express();
 
-// Enable CORS for all routes
 app.use(cors());
 
-// Log HTTP requests
 app.use(requestLogger);
 
-// Existing middleware
 app.use(express.json());
 
-// Routes
+app.get('/', (req, res) => {
+    res.send('Welcome to the Quick-link Server!');
+});
+
 app.use('/api', urlRoutes);
 
-// Log HTTP errors
 app.use(errorLogger);
 
-// Swagger
 swaggerDocs(app);
 
-// Error handling
 app.use(errorHandlerMiddleware);
 
 
