@@ -3,9 +3,8 @@ import axios from 'axios';
 import { Url } from '../../types/url';
 import { setLoading, setError, setUrls, setCurrentUrl, addUrl, updateUrl, deleteUrl } from './urlSlice';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-// Create a new URL
 export const createUrl = createAsyncThunk(
   'url/createUrl',
   async (urlData: { longUrl: string; customShortId?: string }, { dispatch }) => {
@@ -29,7 +28,6 @@ export const createUrl = createAsyncThunk(
   },
 );
 
-// Get all URLs
 export const fetchUrls = createAsyncThunk(
   'url/fetchUrls',
   async (
@@ -62,7 +60,6 @@ export const fetchUrls = createAsyncThunk(
   }
 );
 
-// Get a URL by shortId
 export const fetchUrlByShortId = createAsyncThunk('url/fetchUrlByShortId', async (shortId: string, { dispatch }) => {
   dispatch(setLoading(true));
   try {
@@ -77,7 +74,6 @@ export const fetchUrlByShortId = createAsyncThunk('url/fetchUrlByShortId', async
   }
 });
 
-// Update a URL
 export const updateUrlById = createAsyncThunk(
   'url/updateUrl',
   async (
@@ -104,7 +100,7 @@ export const updateUrlById = createAsyncThunk(
   }
 );
 
-// Delete a URL
+
 export const deleteUrlById = createAsyncThunk('url/deleteUrl', async (shortId: string, { dispatch }) => {
   dispatch(setLoading(true));
   try {
